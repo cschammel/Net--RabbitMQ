@@ -147,6 +147,7 @@ extern amqp_connection_state_t amqp_new_connection(void);
 extern int amqp_get_sockfd(amqp_connection_state_t state);
 extern void amqp_set_sockfd(amqp_connection_state_t state,
 			    int sockfd);
+extern int amqp_set_timeout(int sockfd, struct timeval *timeout);
 extern void amqp_set_basic_return_cb(amqp_connection_state_t state,
                                      amqp_basic_return_fn_t fn,
                                      void *data);

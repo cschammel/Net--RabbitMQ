@@ -462,3 +462,13 @@ amqp_rpc_reply_t amqp_login(amqp_connection_state_t state,
   result.library_errno = 0;
   return result;
 }
+
+int amqp_set_timeout(int sockfd,  struct timeval *timeout) 
+{
+  if ( timeout == NULL ) {
+    return -1;
+  }
+  setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, timeout, sizeof(*timeout));
+  setsockopt(sockfd, SOL_SOCKET, SO_SNDTIMEO, timeout, sizeof(*timeout));
+  return 0;
+}

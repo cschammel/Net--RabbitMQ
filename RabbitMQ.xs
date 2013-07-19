@@ -777,3 +777,22 @@ net_rabbitmq_basic_qos(conn, channel, args = NULL)
                    prefetch_size, prefetch_count, global);
     amqp_rpc_reply = amqp_get_rpc_reply();
     die_on_amqp_error(aTHX_ *amqp_rpc_reply, "Basic QoS");
+
+int
+net_rabbitmq_set_timeout(conn, timeout = -1)
+  Net::RabbitMQ conn
+  double timeout;
+  PREINIT:
+    struct timeval to;
+    int sockfd;
+    int result = -1;
+  CODE:
+    if(timeout >= 0) {
+      to.tv_sec = floor(timeout);
+      to.tv_usec = 1000000.0 * (timeout - floor(timeout));
+    }
+    sockfd = amqp_get_sockfd(conn);
+    if(sockfd >= 0) result = amqp_set_timeout(sockfd, &to);
+    RETVAL = result;
+    OUTPUT:
+    RETVAL
